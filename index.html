@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن</title>
+    <title>مواقيت الصلاة - KFUPM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,10 +15,11 @@
         }
 
         body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
             background: #f5f5f5;
-            color: #333;
+            color: #373938;
             line-height: 1.4;
+            font-weight: 400;
         }
 
         .container {
@@ -25,21 +29,31 @@
         }
 
         .header {
-            background: #00563f;
+            background: #008540;
             color: white;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
+            text-align: center;
         }
 
-        .header h1 {
-            font-size: 1.3rem;
+        .logo-container {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .mosque-note {
+            font-size: 0.75rem;
+            opacity: 0.9;
             margin-bottom: 8px;
-            font-weight: 600;
         }
 
         .date-info {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0.95;
             margin-bottom: 10px;
         }
@@ -51,7 +65,7 @@
         }
 
         .info-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             padding: 8px;
             border-radius: 5px;
             text-align: center;
@@ -65,7 +79,7 @@
 
         .info-value {
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .controls {
@@ -83,25 +97,33 @@
         }
 
         .btn {
-            background: #00563f;
+            background: #008540;
             color: white;
             border: none;
             padding: 6px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.85rem;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn:hover {
-            background: #004530;
+            background: #00573F;
         }
 
         .btn-secondary {
-            background: #666;
+            background: #00573F;
         }
 
         .btn-secondary:hover {
-            background: #555;
+            background: #003E51;
+        }
+
+        .arrow {
+            font-size: 0.7rem;
         }
 
         .prayer-table {
@@ -118,18 +140,18 @@
         }
 
         th {
-            background: #00563f;
+            background: #008540;
             color: white;
             padding: 12px 8px;
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.95rem;
         }
 
         td {
             padding: 12px 8px;
             text-align: center;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #D9DAE4;
             font-size: 0.9rem;
         }
 
@@ -142,20 +164,15 @@
         }
 
         .prayer-name {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
+            color: #373938;
         }
 
         .time {
             font-size: 1.05rem;
-            font-weight: 500;
-            color: #00563f;
-        }
-
-        .mosque-note {
-            font-size: 0.7rem;
-            color: #666;
-            margin-top: 2px;
+            font-weight: 400;
+            color: #008540;
         }
 
         .advanced-section {
@@ -176,19 +193,19 @@
             padding: 10px;
             background: #f9f9f9;
             border-radius: 5px;
-            border-left: 3px solid #00563f;
+            border-left: 3px solid #008540;
         }
 
         .advanced-label {
             font-size: 0.8rem;
-            color: #666;
+            color: #373938;
             margin-bottom: 4px;
         }
 
         .advanced-value {
             font-size: 1rem;
-            font-weight: 600;
-            color: #00563f;
+            font-weight: 700;
+            color: #008540;
         }
 
         .settings-panel {
@@ -197,12 +214,41 @@
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 10px;
+            position: relative;
         }
 
-        .settings-panel h3 {
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
-            color: #00563f;
+        }
+
+        .settings-header h3 {
+            color: #008540;
             font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: #AA8A00;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: #DAC961;
+            color: #373938;
         }
 
         .setting-item {
@@ -212,21 +258,28 @@
         .setting-label {
             display: block;
             margin-bottom: 4px;
-            font-weight: 500;
+            font-weight: 400;
             font-size: 0.85rem;
+            color: #373938;
         }
 
         .setting-input {
             width: 100%;
             padding: 6px;
-            border: 1px solid #ddd;
+            border: 1px solid #D9DAE4;
             border-radius: 4px;
             font-size: 0.9rem;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: #008540;
         }
 
         [dir="ltr"] .advanced-item {
             border-left: none;
-            border-right: 3px solid #00563f;
+            border-right: 3px solid #008540;
         }
 
         @media (max-width: 600px) {
@@ -238,12 +291,12 @@
                 padding: 12px;
             }
 
-            .header h1 {
-                font-size: 1.1rem;
+            .logo {
+                height: 40px;
             }
 
             .date-info {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .info-label {
@@ -285,7 +338,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 id="mainTitle">مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن</h1>
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                    <text x="100" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">KFUPM</text>
+                </svg>
+            </div>
+            <div class="mosque-note" id="mosqueNote">مسجد علي بن أبي طالب</div>
             <div class="date-info" id="dateInfo"></div>
             <div class="current-info">
                 <div class="info-item">
@@ -308,16 +366,22 @@
                 <button class="btn" id="langBtn" onclick="toggleLanguage()">English</button>
                 <button class="btn btn-secondary" id="advancedBtn" onclick="toggleAdvanced()">عرض متقدم</button>
             </div>
-            <button class="btn btn-secondary" id="settingsBtn" onclick="toggleSettings()">إعدادات</button>
+            <button class="btn btn-secondary" id="settingsBtn" onclick="toggleSettings()">
+                <span id="settingsBtnText">إعدادات</span>
+                <span class="arrow" id="settingsArrow">▼</span>
+            </button>
         </div>
 
         <div class="settings-panel hidden" id="settingsPanel">
-            <h3 id="settingsTitle">الإعدادات</h3>
+            <div class="settings-header">
+                <h3 id="settingsTitle">الإعدادات</h3>
+                <button class="close-btn" onclick="toggleSettings()" aria-label="Close">×</button>
+            </div>
             <div class="setting-item">
                 <label class="setting-label" id="formatLabel">صيغة الوقت</label>
                 <select class="setting-input" id="timeFormat" onchange="saveSettings()">
-                    <option value="24">24 ساعة</option>
                     <option value="12">12 ساعة</option>
+                    <option value="24">24 ساعة</option>
                 </select>
             </div>
             <div class="setting-item">
@@ -371,7 +435,7 @@
         let showSettings = false;
         let fajrClicks = 0;
         let fajrClickTimer = null;
-        let timeFormat = '24';
+        let timeFormat = '12';
         let iqamaTimes = {
             fajr: 30,
             dhuhr: 20,
@@ -382,13 +446,12 @@
 
         const translations = {
             ar: {
-                mainTitle: 'مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن',
                 currentTimeLabel: 'الوقت الحالي',
                 nextAthanLabel: 'للأذان',
                 nextIqamaLabel: 'للإقامة',
                 langBtn: 'English',
                 advancedBtn: 'عرض متقدم',
-                settingsBtn: 'إعدادات',
+                settingsBtnText: 'إعدادات',
                 settingsTitle: 'الإعدادات',
                 formatLabel: 'صيغة الوقت',
                 fajrLabel: 'الفجر - فترة الإقامة (دقيقة)',
@@ -414,13 +477,12 @@
                 sahar: 'بداية السحر (آخر 1/6)'
             },
             en: {
-                mainTitle: 'Prayer Times - King Fahd University of Petroleum & Minerals',
                 currentTimeLabel: 'Current Time',
                 nextAthanLabel: 'To Athan',
                 nextIqamaLabel: 'To Iqama',
                 langBtn: 'العربية',
                 advancedBtn: 'Advanced',
-                settingsBtn: 'Settings',
+                settingsBtnText: 'Settings',
                 settingsTitle: 'Settings',
                 formatLabel: 'Time Format',
                 fajrLabel: 'Fajr - Iqama Gap (min)',
@@ -557,10 +619,10 @@
             }
             
             if (timeFormat === '12') {
-                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const suffix = currentLang === 'ar' ? (hours >= 12 ? ' م' : ' ص') : (hours >= 12 ? ' PM' : ' AM');
                 hours = hours % 12;
                 hours = hours ? hours : 12;
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}${suffix}`;
             }
             
             return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
@@ -649,10 +711,7 @@
                 row.innerHTML = `
                     <td class="prayer-name">${prayer.name}</td>
                     <td class="time">${formatTime(athanTime, showMs)}</td>
-                    <td>
-                        <div class="time">${formatTime(iqamaTime)}</div>
-                        <div class="mosque-note">${translations[currentLang].mosqueNote}</div>
-                    </td>
+                    <td class="time">${formatTime(iqamaTime)}</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -763,18 +822,14 @@
             Object.keys(translations[currentLang]).forEach(key => {
                 const element = document.getElementById(key);
                 if (element) {
-                    if (element.tagName === 'BUTTON' || element.tagName === 'OPTION') {
-                        element.textContent = translations[currentLang][key];
-                    } else {
-                        element.textContent = translations[currentLang][key];
-                    }
+                    element.textContent = translations[currentLang][key];
                 }
             });
 
             const timeFormatSelect = document.getElementById('timeFormat');
             timeFormatSelect.innerHTML = currentLang === 'ar' ? 
-                '<option value="24">24 ساعة</option><option value="12">12 ساعة</option>' :
-                '<option value="24">24 Hour</option><option value="12">12 Hour</option>';
+                '<option value="12">12 ساعة</option><option value="24">24 ساعة</option>' :
+                '<option value="12">12 Hour</option><option value="24">24 Hour</option>';
             timeFormatSelect.value = timeFormat;
 
             updateDisplay();
@@ -791,7 +846,9 @@
         function toggleSettings() {
             showSettings = !showSettings;
             const panel = document.getElementById('settingsPanel');
+            const arrow = document.getElementById('settingsArrow');
             panel.classList.toggle('hidden');
+            arrow.textContent = showSettings ? '▲' : '▼';
         }
 
         function saveSettings() {
