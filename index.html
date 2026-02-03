@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .header {
+            background: #00563f;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .current-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #00563f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #004530;
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .prayer-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #00563f;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .prayer-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .time {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #00563f;
+        }
+
+        .mosque-note {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .advanced-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .advanced-item {
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 3px solid #00563f;
+        }
+
+        .advanced-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .advanced-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00563f;
+        }
+
+        .settings-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .settings-panel h3 {
+            margin-bottom: 15px;
+            color: #00563f;
+        }
+
+        .setting-item {
+            margin-bottom: 15px;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .setting-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        [dir="ltr"] .advanced-item {
+            border-left: none;
+            border-right: 3px solid #00563f;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .current-info {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 10px 5px;
+                font-size: 0.9rem;
+            }
+
+            .prayer-name {
+                font-size: 0.95rem;
+            }
+
+            .time {
+                font-size: 1rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="mainTitle">مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن</h1>
+            <div class="current-info">
+                <div class="info-item">
+                    <div class="info-label" id="currentTimeLabel">الوقت الحالي</div>
+                    <div class="info-value" id="currentTime">--:--:--</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label" id="nextAthanLabel">المتبقي للأذان</div>
+                    <div class="info-value" id="nextAthan">--:--</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label" id="nextIqamaLabel">المتبقي للإقامة</div>
+                    <div class="info-value" id="nextIqama">--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div>
+                <button class="btn" id="langBtn" onclick="toggleLanguage()">English</button>
+                <button class="btn btn-secondary" id="advancedBtn" onclick="toggleAdvanced()">عرض متقدم</button>
+            </div>
+            <button class="btn btn-secondary" id="settingsBtn" onclick="toggleSettings()">الإعدادات</button>
+        </div>
+
+        <div class="settings-panel hidden" id="settingsPanel">
+            <h3 id="settingsTitle">الإعدادات</h3>
+            <div class="setting-item">
+                <label class="setting-label" id="formatLabel">صيغة الوقت</label>
+                <select class="setting-input" id="timeFormat" onchange="saveSettings()">
+                    <option value="24">24 ساعة</option>
+                    <option value="12">12 ساعة</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label" id="fajrLabel">الفترة بين الأذان والإقامة - الفجر (دقيقة)</label>
+                <input type="number" class="setting-input" id="fajrIqama" value="30" onchange="saveSettings()">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label" id="dhuhrLabel">الظهر (دقيقة)</label>
+                <input type="number" class="setting-input" id="dhuhrIqama" value="20" onchange="saveSettings()">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label" id="asrLabel">العصر (دقيقة)</label>
+                <input type="number" class="setting-input" id="asrIqama" value="20" onchange="saveSettings()">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label" id="maghribLabel">المغرب (دقيقة)</label>
+                <input type="number" class="setting-input" id="maghribIqama" value="15" onchange="saveSettings()">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label" id="ishaLabel">العشاء (دقيقة)</label>
+                <input type="number" class="setting-input" id="ishaIqama" value="20" onchange="saveSettings()">
+            </div>
+        </div>
+
+        <div class="prayer-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th id="prayerHeader">الصلاة</th>
+                        <th id="athanHeader">الأذان</th>
+                        <th id="iqamaHeader">الإقامة</th>
+                    </tr>
+                </thead>
+                <tbody id="prayerTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="advanced-section hidden" id="advancedSection">
+            <div class="advanced-grid" id="advancedGrid">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const KFUPM_LAT = 26.3137222;
+        const KFUPM_LNG = 50.1461389;
+        
+        let currentLang = 'ar';
+        let showAdvanced = false;
+        let showSettings = false;
+        let fajrClicks = 0;
+        let fajrClickTimer = null;
+        let timeFormat = '24';
+        let iqamaTimes = {
+            fajr: 30,
+            dhuhr: 20,
+            asr: 20,
+            maghrib: 15,
+            isha: 20
+        };
+
+        const translations = {
+            ar: {
+                mainTitle: 'مواقيت الصلاة - جامعة الملك فهد للبترول والمعادن',
+                currentTimeLabel: 'الوقت الحالي',
+                nextAthanLabel: 'المتبقي للأذان',
+                nextIqamaLabel: 'المتبقي للإقامة',
+                langBtn: 'English',
+                advancedBtn: 'عرض متقدم',
+                settingsBtn: 'الإعدادات',
+                settingsTitle: 'الإعدادات',
+                formatLabel: 'صيغة الوقت',
+                fajrLabel: 'الفترة بين الأذان والإقامة - الفجر (دقيقة)',
+                dhuhrLabel: 'الظهر (دقيقة)',
+                asrLabel: 'العصر (دقيقة)',
+                maghribLabel: 'المغرب (دقيقة)',
+                ishaLabel: 'العشاء (دقيقة)',
+                prayerHeader: 'الصلاة',
+                athanHeader: 'الأذان',
+                iqamaHeader: 'الإقامة',
+                fajr: 'الفجر',
+                dhuhr: 'الظهر',
+                jumaa: 'الجمعة',
+                asr: 'العصر',
+                maghrib: 'المغرب',
+                isha: 'العشاء',
+                mosqueNote: 'مسجد علي بن أبي طالب',
+                sunrise: 'الشروق',
+                daytime: 'النهار',
+                nighttime: 'الليل',
+                midnight: 'منتصف الليل',
+                lastThird: 'بداية الثلث الأخير',
+                sahar: 'بداية السحر (آخر 1/6 من الليل)'
+            },
+            en: {
+                mainTitle: 'Prayer Times - King Fahd University of Petroleum & Minerals',
+                currentTimeLabel: 'Current Time',
+                nextAthanLabel: 'Time to Athan',
+                nextIqamaLabel: 'Time to Iqama',
+                langBtn: 'العربية',
+                advancedBtn: 'Advanced View',
+                settingsBtn: 'Settings',
+                settingsTitle: 'Settings',
+                formatLabel: 'Time Format',
+                fajrLabel: 'Athan-Iqama Gap - Fajr (minutes)',
+                dhuhrLabel: 'Dhuhr (minutes)',
+                asrLabel: 'Asr (minutes)',
+                maghribLabel: 'Maghrib (minutes)',
+                ishaLabel: 'Isha (minutes)',
+                prayerHeader: 'Prayer',
+                athanHeader: 'Athan',
+                iqamaHeader: 'Iqama',
+                fajr: 'Fajr',
+                dhuhr: 'Dhuhr',
+                jumaa: 'Jumaa',
+                asr: 'Asr',
+                maghrib: 'Maghrib',
+                isha: 'Isha',
+                mosqueNote: 'Ali Ibn Abi Talib Mosque',
+                sunrise: 'Sunrise',
+                daytime: 'Daytime',
+                nighttime: 'Nighttime',
+                midnight: 'Midnight',
+                lastThird: 'Last Third Begins',
+                sahar: 'Sahar Begins (Last 1/6 of Night)'
+            }
+        };
+
+        function degreesToRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        function radiansToDegrees(radians) {
+            return radians * 180 / Math.PI;
+        }
+
+        function calculateJulianDay(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            if (month <= 2) {
+                return Math.floor(365.25 * (year - 1)) + Math.floor(30.6001 * (month + 13)) + day + 1720995;
+            }
+            return Math.floor(365.25 * year) + Math.floor(30.6001 * (month + 1)) + day + 1720995;
+        }
+
+        function calculatePrayerTimes(date, latitude, longitude) {
+            const jd = calculateJulianDay(date);
+            const n = jd - 2451545.0;
+            const L = (280.460 + 0.9856474 * n) % 360;
+            const g = (357.528 + 0.9856003 * n) % 360;
+            const lambda = (L + 1.915 * Math.sin(degreesToRadians(g)) + 0.020 * Math.sin(degreesToRadians(2 * g))) % 360;
+            const epsilon = 23.439 - 0.0000004 * n;
+            const delta = radiansToDegrees(Math.asin(Math.sin(degreesToRadians(epsilon)) * Math.sin(degreesToRadians(lambda))));
+            const EqT = 4 * (L - radiansToDegrees(Math.atan2(
+                Math.cos(degreesToRadians(epsilon)) * Math.sin(degreesToRadians(lambda)),
+                Math.cos(degreesToRadians(lambda))
+            )));
+
+            function calculateTime(angle) {
+                const cosH = (Math.sin(degreesToRadians(angle)) - 
+                    Math.sin(degreesToRadians(latitude)) * Math.sin(degreesToRadians(delta))) /
+                    (Math.cos(degreesToRadians(latitude)) * Math.cos(degreesToRadians(delta)));
+                
+                if (cosH > 1 || cosH < -1) return null;
+                
+                const H = radiansToDegrees(Math.acos(cosH));
+                const T = 12 + longitude / 15 - EqT / 60;
+                return T;
+            }
+
+            const timezone = 3;
+            const fajr = calculateTime(-18) - 12 + timezone;
+            const sunrise = calculateTime(-0.833) - 12 + timezone;
+            const dhuhr = 12 + longitude / 15 - EqT / 60 + timezone;
+            const asr = calculateTime(-1 * radiansToDegrees(Math.atan(1 + Math.tan(degreesToRadians(Math.abs(latitude - delta)))))) + 12 + timezone;
+            const maghrib = calculateTime(-0.833) + 12 + timezone;
+            const isha = calculateTime(-17) + 12 + timezone;
+
+            return { fajr, sunrise, dhuhr, asr, maghrib, isha };
+        }
+
+        function timeToDate(hours) {
+            const date = new Date();
+            const totalMinutes = hours * 60;
+            const h = Math.floor(totalMinutes / 60);
+            const m = Math.floor(totalMinutes % 60);
+            const s = Math.floor((totalMinutes * 60) % 60);
+            date.setHours(h, m, s, 0);
+            return date;
+        }
+
+        function formatTime(date, showMilliseconds = false) {
+            let hours = date.getHours();
+            const minutes = date.getMinutes();
+            const seconds = date.getSeconds();
+            const milliseconds = date.getMilliseconds();
+            
+            if (showMilliseconds) {
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+            }
+            
+            if (timeFormat === '12') {
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
+            }
+            
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        }
+
+        function formatTimeDifference(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            if (hours > 0) {
+                return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+            return `${minutes}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function handleFajrClick() {
+            fajrClicks++;
+            
+            if (fajrClickTimer) {
+                clearTimeout(fajrClickTimer);
+            }
+            
+            fajrClickTimer = setTimeout(() => {
+                fajrClicks = 0;
+            }, 2000);
+            
+            if (fajrClicks >= 10) {
+                updateDisplay(true);
+                fajrClicks = 0;
+            }
+        }
+
+        function updateDisplay(fajrMilliseconds = false) {
+            const now = new Date();
+            const times = calculatePrayerTimes(now, KFUPM_LAT, KFUPM_LNG);
+            const isFriday = now.getDay() === 5;
+            
+            const prayerData = [
+                { name: translations[currentLang].fajr, time: times.fajr, key: 'fajr', clickable: true },
+                { name: isFriday ? translations[currentLang].jumaa : translations[currentLang].dhuhr, time: times.dhuhr, key: 'dhuhr' },
+                { name: translations[currentLang].asr, time: times.asr, key: 'asr' },
+                { name: translations[currentLang].maghrib, time: times.maghrib, key: 'maghrib' },
+                { name: translations[currentLang].isha, time: times.isha, key: 'isha' }
+            ];
+
+            const tbody = document.getElementById('prayerTableBody');
+            tbody.innerHTML = '';
+
+            prayerData.forEach(prayer => {
+                const athanTime = timeToDate(prayer.time);
+                const iqamaTime = new Date(athanTime.getTime() + iqamaTimes[prayer.key] * 60000);
+                
+                const row = document.createElement('tr');
+                if (prayer.clickable) {
+                    row.style.cursor = 'pointer';
+                    row.onclick = handleFajrClick;
+                }
+                
+                const showMs = fajrMilliseconds && prayer.key === 'fajr';
+                
+                row.innerHTML = `
+                    <td class="prayer-name">${prayer.name}</td>
+                    <td class="time">${formatTime(athanTime, showMs)}</td>
+                    <td>
+                        <div class="time">${formatTime(iqamaTime)}</div>
+                        <div class="mosque-note">${translations[currentLang].mosqueNote}</div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateCurrentInfo(times);
+            updateAdvancedInfo(times);
+        }
+
+        function updateCurrentInfo(times) {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = formatTime(now, false);
+
+            const prayers = [
+                { name: 'fajr', time: times.fajr },
+                { name: 'dhuhr', time: times.dhuhr },
+                { name: 'asr', time: times.asr },
+                { name: 'maghrib', time: times.maghrib },
+                { name: 'isha', time: times.isha }
+            ];
+
+            let nextPrayer = null;
+            for (const prayer of prayers) {
+                const prayerTime = timeToDate(prayer.time);
+                if (prayerTime > now) {
+                    nextPrayer = prayer;
+                    break;
+                }
+            }
+
+            if (!nextPrayer) {
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowTimes = calculatePrayerTimes(tomorrow, KFUPM_LAT, KFUPM_LNG);
+                nextPrayer = { name: 'fajr', time: tomorrowTimes.fajr };
+                const fajrTime = timeToDate(nextPrayer.time);
+                fajrTime.setDate(fajrTime.getDate() + 1);
+                const diff = fajrTime - now;
+                document.getElementById('nextAthan').textContent = formatTimeDifference(diff);
+                
+                const iqamaTime = new Date(fajrTime.getTime() + iqamaTimes[nextPrayer.name] * 60000);
+                const iqamaDiff = iqamaTime - now;
+                document.getElementById('nextIqama').textContent = formatTimeDifference(iqamaDiff);
+            } else {
+                const athanTime = timeToDate(nextPrayer.time);
+                const diff = athanTime - now;
+                document.getElementById('nextAthan').textContent = formatTimeDifference(diff);
+                
+                const iqamaTime = new Date(athanTime.getTime() + iqamaTimes[nextPrayer.name] * 60000);
+                const iqamaDiff = iqamaTime - now;
+                document.getElementById('nextIqama').textContent = formatTimeDifference(iqamaDiff);
+            }
+        }
+
+        function updateAdvancedInfo(times) {
+            if (!showAdvanced) return;
+
+            const sunrise = timeToDate(times.sunrise);
+            const maghrib = timeToDate(times.maghrib);
+            const fajr = timeToDate(times.fajr);
+            const isha = timeToDate(times.isha);
+
+            const daytimeMs = maghrib - sunrise;
+            const nighttimeMs = 24 * 60 * 60 * 1000 - daytimeMs;
+            
+            const midnight = new Date(maghrib.getTime() + nighttimeMs / 2);
+            const lastThird = new Date(maghrib.getTime() + (nighttimeMs * 2 / 3));
+            const sahar = new Date(maghrib.getTime() + (nighttimeMs * 5 / 6));
+
+            const advancedData = [
+                { label: translations[currentLang].sunrise, value: formatTime(sunrise) },
+                { label: translations[currentLang].daytime, value: formatTimeDifference(daytimeMs) },
+                { label: translations[currentLang].nighttime, value: formatTimeDifference(nighttimeMs) },
+                { label: translations[currentLang].midnight, value: formatTime(midnight) },
+                { label: translations[currentLang].lastThird, value: formatTime(lastThird) },
+                { label: translations[currentLang].sahar, value: formatTime(sahar) }
+            ];
+
+            const grid = document.getElementById('advancedGrid');
+            grid.innerHTML = '';
+            
+            advancedData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'advanced-item';
+                div.innerHTML = `
+                    <div class="advanced-label">${item.label}</div>
+                    <div class="advanced-value">${item.value}</div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            Object.keys(translations[currentLang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'BUTTON' || element.tagName === 'OPTION') {
+                        element.textContent = translations[currentLang][key];
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
+                }
+            });
+
+            const timeFormatSelect = document.getElementById('timeFormat');
+            timeFormatSelect.innerHTML = currentLang === 'ar' ? 
+                '<option value="24">24 ساعة</option><option value="12">12 ساعة</option>' :
+                '<option value="24">24 Hour</option><option value="12">12 Hour</option>';
+            timeFormatSelect.value = timeFormat;
+
+            updateDisplay();
+            saveSettings();
+        }
+
+        function toggleAdvanced() {
+            showAdvanced = !showAdvanced;
+            const section = document.getElementById('advancedSection');
+            section.classList.toggle('hidden');
+            updateDisplay();
+        }
+
+        function toggleSettings() {
+            showSettings = !showSettings;
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        function saveSettings() {
+            timeFormat = document.getElementById('timeFormat').value;
+            iqamaTimes.fajr = parseInt(document.getElementById('fajrIqama').value) || 30;
+            iqamaTimes.dhuhr = parseInt(document.getElementById('dhuhrIqama').value) || 20;
+            iqamaTimes.asr = parseInt(document.getElementById('asrIqama').value) || 20;
+            iqamaTimes.maghrib = parseInt(document.getElementById('maghribIqama').value) || 15;
+            iqamaTimes.isha = parseInt(document.getElementById('ishaIqama').value) || 20;
+
+            const settings = {
+                lang: currentLang,
+                timeFormat: timeFormat,
+                iqamaTimes: iqamaTimes
+            };
+            
+            document.cookie = `prayerSettings=${JSON.stringify(settings)}; path=/; max-age=31536000`;
+            updateDisplay();
+        }
+
+        function loadSettings() {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'prayerSettings') {
+                    try {
+                        const settings = JSON.parse(decodeURIComponent(value));
+                        if (settings.lang && settings.lang !== currentLang) {
+                            toggleLanguage();
+                        }
+                        if (settings.timeFormat) {
+                            timeFormat = settings.timeFormat;
+                            document.getElementById('timeFormat').value = timeFormat;
+                        }
+                        if (settings.iqamaTimes) {
+                            iqamaTimes = settings.iqamaTimes;
+                            document.getElementById('fajrIqama').value = iqamaTimes.fajr;
+                            document.getElementById('dhuhrIqama').value = iqamaTimes.dhuhr;
+                            document.getElementById('asrIqama').value = iqamaTimes.asr;
+                            document.getElementById('maghribIqama').value = iqamaTimes.maghrib;
+                            document.getElementById('ishaIqama').value = iqamaTimes.isha;
+                        }
+                    } catch (e) {
+                        console.error('Error loading settings:', e);
+                    }
+                    break;
+                }
+            }
+        }
+
+        loadSettings();
+        updateDisplay();
+        setInterval(() => updateDisplay(), 1000);
+    </script>
+</body>
+</html>
